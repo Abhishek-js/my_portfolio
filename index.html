@@ -1,0 +1,204 @@
+<html>
+<head>
+    <title>Quiz</title>
+   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js" integrity="sha256-jDnOKIOq2KNsQZTcBTEnsp76FnfMEttF6AV2DF2fFNE=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+     <link rel="stylesheet" href="C:\Users\HP\Desktop\font-awesome\fontawesome-free-5.12.1-web\css\all.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+<!--    <script src="js/script.js"></script>-->
+    </head>
+    <body>
+        <center>
+    <div class="container">
+    <h1 id="heading">Quiz Game Online</h1>
+    <div class="quiz" id="quiz">
+    <div id="question-container" class="hide">
+      <div id="question" class="sawal">Question</div>
+      <div id="answer-buttons" class="btn-grid">
+        <button class="btn">Answer 1</button>
+        <button class="btn">Answer 2</button><br>
+        <button class="btn">Answer 3</button>
+        <button class="btn">Answer 4</button>
+      </div>
+    </div>
+    <div class="controls">
+       <button id="start-btn" class="btn btn-outline-primary btn-lg start-btn mt-4" style="width: 110px; height: 60px; font-family: sans-serif;" >Play</button>
+       <button id="next-btn" class="btn btn-primary mr-4 mt-4 hide">Next</button>
+    </div>
+    </div>
+                   <div class="score hide" id="score">
+                   <h1>YOUR SCORE</h1>
+                   <h1><span id="quizscore">0</span></h1>
+                   </div>
+            </div>
+        </center>
+        <script>
+            
+   const questionContainer = document.getElementById("question-container")
+   const startBtn = document.getElementById("start-btn")
+   const nextBtn = document.getElementById("next-btn")
+   const questionEliment = document.getElementById("question")
+   const answerBtn = document.getElementById("answer-buttons")
+   const heading = document.getElementById("heading")
+   const score = document.getElementById("score")
+   let scores =  document.querySelector("#quizscore").innerHTML;
+//                 scores++;
+//                 document.querySelector("#quizscore").innerHTML = scores; 
+    
+       
+        let shuffledQuestions, currentQuestionIndex, green
+
+        startBtn.addEventListener('click', startGame)
+        nextBtn.addEventListener('click', () => {
+        currentQuestionIndex++
+        setNextQuestion()
+    })
+            
+        function startGame(){
+//      After Click Start Button, this button will be hide. bcz .hide{display: none;} in css.
+//      'hide' class add for this start Button only.
+        startBtn.classList.add('hide')  
+        shuffledQuestions = questions
+        currentQuestionIndex = 0
+//      After Click Start Button, The class name of questionContainer 'hide' is remove. 
+        questionContainer.classList.remove('hide')
+        score.classList.remove('hide')
+        setNextQuestion()
+        }
+        
+        
+        function setNextQuestion(){
+             resetState()
+             showQuestion(shuffledQuestions[currentQuestionIndex])
+        }
+        
+        function showQuestion(question){
+ //     questionEliment.style.animation = 'fadeInLeft 0.5s ease'
+        questionEliment.innerText = question.question
+        question.answers.forEach(answer => {
+    const button = document.createElement('button')
+    button.style.animation = 'fadeInRight 0.6s ease'
+    button.innerText = answer.text
+    button.classList.add('btn')
+    if (answer.correct) {
+      button.dataset.correct = answer.correct
+    }
+    button.addEventListener('click', selectAnswer)
+    answerBtn.appendChild(button)
+  })
+    color()
+}
+            function resetState() {
+  clearStatusClass(document.body)
+  nextBtn.classList.add('hide')
+  while (answerBtn.firstChild) {
+  answerBtn.removeChild(answerBtn.firstChild)
+  }
+}
+            
+            function selectAnswer(e) {
+  const selectedButton = e.target
+  const correct = selectedButton.dataset.correct
+  setStatusClass(document.body, correct)
+  Array.from(answerBtn.children).forEach(button => {
+    setStatusClass(button, button.dataset.correct)
+  })
+  if (shuffledQuestions.length > currentQuestionIndex + 1) {
+    nextBtn.classList.remove('hide')
+  } else {
+    startBtn.innerText = 'Restart'
+    startBtn.classList.remove('hide')
+  }
+}
+            function setStatusClass(element, correct) {
+            clearStatusClass(element)
+if (correct) {
+    element.classList.add('correct-green')
+    scores++;
+    document.querySelector("#quizscore").innerHTML = scores; 
+  } 
+else {
+    element.classList.add('wrong-red')
+  }
+}
+  
+            function clearStatusClass(element) {
+            element.classList.remove('correct-green')
+            element.classList.remove('wrong-red')  
+        }
+            
+            function getscore(){
+              if(green){
+//            let scores = document.querySelector("#quizscore").innerHTML;
+//            scores++;
+//            document.querySelector("#quizscore").innerHTML = scores;   
+              }  
+            }
+        
+       const questions = [
+    {
+    question: 'Which One is Not a OOP Language?',
+    answers: [
+      { 
+          text: 'C', 
+          correct: true 
+      },
+      { 
+          text: 'Javascript', 
+          correct: false 
+      }
+    ]
+  },
+  {
+    question: 'What is the capita of Australia?',
+    answers: [
+      { text: 'Adelaide', correct: false },
+      { text: 'Melbourne', correct: false,},
+      { text: 'Canberra', correct: true },
+      { text: 'Sydney', correct: false }
+    ]
+  },
+  {
+    question: 'Human has...',
+    answers: [
+      { text: '200 bones', correct: false },
+      { text: '206 bones', correct: true },
+      { text: '180 bones', correct: false },
+      { text: '250 bones', correct: false }
+    ]
+  },
+  {
+    question: 'What is 4 x 2?',
+    answers: [
+      { text: '6', correct: false },
+      { text: '8', correct: true }
+    ]
+  }
+]
+       
+       $("document").ready(function(){
+          
+           $(".quiz").waypoint(function(direction){
+              
+               $("#nextBtn").on('click' , function(){
+                   
+                   $(".quiz").addClass('animated fadeIn')
+                   
+               })
+           });
+           
+       });
+       
+       
+        </script>
+        
+        
+    </body>
+</html>
